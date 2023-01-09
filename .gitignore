@@ -1,0 +1,5 @@
+# Project exclude paths
+/AemetDL/target/
+/AemetDM/target/
+/API/target/
+/target/

@@ -6,8 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="AemetDL" />
         <module name="API" />
+        <module name="AemetFeeder" />
         <module name="AemetDM" />
       </profile>
     </annotationProcessing>

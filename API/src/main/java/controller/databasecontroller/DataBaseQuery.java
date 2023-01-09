@@ -1,4 +1,4 @@
-package databasecontroller;
+package controller.databasecontroller;
 
 import model.TempEvent;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataBaseQuery implements Query {
-    private DataBaseConnection dataBaseConnection;
+    private final DataBaseConnection dataBaseConnection;
 
     public DataBaseQuery(DataBaseConnection dataBaseConnection) {
         this.dataBaseConnection = dataBaseConnection;
@@ -37,11 +37,7 @@ public class DataBaseQuery implements Query {
         Statement statement = dataBaseConnection.getConn().createStatement();
         ResultSet rs = statement.executeQuery(sql);
 
-        while (rs.next()) {
-           return getTempEvent(rs);
-        }
-
-        return null;
+        return getTempEvent(rs);
     }
 
     private TempEvent getTempEvent(ResultSet rs) throws SQLException {

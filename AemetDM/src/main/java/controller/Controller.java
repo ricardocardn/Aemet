@@ -8,12 +8,14 @@ import controller.dataextractor.DataLakeDataExtractor;
 import model.TempEvent;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Controller {
-    private DataExtractor dataExtractor;
-    private DataBaseDDL dataBaseDDL;
-    private DataBaseQuery dataBaseQuery;
+    private final DataExtractor dataExtractor;
+    private final DataBaseDDL dataBaseDDL;
+    private final DataBaseQuery dataBaseQuery;
+    private final static DateTimeFormatter fr = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public Controller(DataExtractor dataExtractor, DataBaseDDL dataBaseDDL, DataBaseQuery dataBaseQuery) {
         this.dataExtractor = dataExtractor;
@@ -21,16 +23,16 @@ public class Controller {
         this.dataBaseQuery = dataBaseQuery;
     }
 
-    public void run(String date) {
+    public void run(LocalDate date) {
         updateMaxTemp(date);
         updateMinTemp(date);
     }
 
-    private void updateMaxTemp(String date) {
+    private void updateMaxTemp(LocalDate date) {
         dataBaseDDL.createTables();
         try {
-            List<TempEvent> tempEvents = dataExtractor.getEvents(LocalDate.now());
-            TempEvent maxTempEvent = dataBaseQuery.getTempEvent("MaxTemp", date);
+            List<TempEvent> tempEvents = dataExtractor.getEvents(date);
+            TempEvent maxTempEvent = dataBaseQuery.getTempEvent("MaxTemp", date.format(fr));
             TempEvent lastMaxTempEvent = getLastMaxTempEvent(tempEvents);
 
             if (maxTempEvent == null) {
@@ -49,15 +51,15 @@ public class Controller {
         }
     }
 
-    private void updateMinTemp(String date) {
+    private void updateMinTemp(LocalDate date) {
         try {
-            List<TempEvent> tempEvents = dataExtractor.getEvents(LocalDate.now());
-            TempEvent minTempEvent = dataBaseQuery.getTempEvent("MinTemp", date);
+            List<TempEvent> tempEvents = dataExtractor.getEvents(date);
+            TempEvent minTempEvent = dataBaseQuery.getTempEvent("MinTemp", date.format(fr));
             TempEvent lastMinTempEvent = getLastMinTempEvent(tempEvents);
 
             if (minTempEvent == null) {
                 dataBaseDDL.insertIntoTable("MinTemp", lastMinTempEvent);
-                //printTemp("Min", lastMinTempEvent);
+                printTemp("Min", lastMinTempEvent);
 
             } else if (minTempEvent.getTemperature() > lastMinTempEvent.getTemperature()) {
                 dataBaseDDL.insertIntoTable("MinTemp", lastMinTempEvent);
@@ -67,7 +69,7 @@ public class Controller {
                 printTemp("Min", minTempEvent);
             }
         } catch (Exception e) {
-            System.out.println("Error");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -92,13 +94,11 @@ public class Controller {
     }
 
     private void printTemp(String name, TempEvent tempEvent) {
-        System.out.println(
-                String.format(
-                        "%s. temperature on the island this day (%s) until now: %s (%s)",
-                        name,
-                        LocalDate.now(),
-                        tempEvent.getTemperature(),
-                        tempEvent.getUbi())
-        );
+        System.out.printf(
+                "%s. temperature on the island this day (%s) until now: %s (%s)%n",
+                name,
+                LocalDate.now(),
+                tempEvent.getTemperature(),
+                tempEvent.getUbi());
     }
 }

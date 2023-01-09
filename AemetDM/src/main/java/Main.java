@@ -20,7 +20,6 @@ import java.util.TimerTask;
 public class Main {
     public static void main(String[] args) {
         DateTimeFormatter fr = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String date = LocalDate.now().format(fr);
 
         DataExtractor dataExtractor = new DataLakeDataExtractor();
         DataBaseConnection dataBaseConnection = new DataBaseConnection("temp.db");
@@ -35,7 +34,7 @@ public class Main {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                String date = LocalDate.now().format(fr);
+                LocalDate date = LocalDate.now();
                 controller.run(date);
             }
         };

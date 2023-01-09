@@ -1,6 +1,6 @@
 package controller;
 
-import datalake.DataLake;
+import controller.datalake.DataLake;
 import model.WeatherEvent;
 
 import java.io.IOException;
@@ -11,15 +11,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Controller {
-    private EventCollector eventCollector;
 
-    public Controller() {
-        this.eventCollector = new EventCollector();;
-    }
+    public Controller() {}
 
     public void run(DataLake dataLake, String apiKey) {
         DateTimeFormatter fr = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String fileName = "datalake/" + LocalDate.now().format(fr) + ".events";
+        String fileName = "controller/datalake/" + LocalDate.now().format(fr) + ".events";
 
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {

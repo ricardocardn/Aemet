@@ -1,4 +1,4 @@
-package datalake;
+package controller.datalake;
 
 import com.google.gson.Gson;
 import model.WeatherEvent;
@@ -31,7 +31,7 @@ public class DataLakeFile implements DataLake {
     }
 
     private void saveOnFile(List<WeatherEvent> weatherEvents, String fileName) throws IOException {
-        FileOutputStream file = new FileOutputStream(new File("datalake/" + fileName + ".events"));
+        FileOutputStream file = new FileOutputStream("datalake/" + fileName + ".events");
         file.write((new Gson().toJson(weatherEvents) + '\n').getBytes(StandardCharsets.UTF_8));
         file.close();
     }
@@ -54,7 +54,7 @@ public class DataLakeFile implements DataLake {
     }
 
     private void saveLog(String fileName, String success) throws IOException {
-        FileWriter logs = new FileWriter(new File("datalake/logs/" + fileName + ".log"), true);
+        FileWriter logs = new FileWriter("datalake/logs/" + fileName + ".log", true);
         logs.write(success);
         logs.close();
     }
