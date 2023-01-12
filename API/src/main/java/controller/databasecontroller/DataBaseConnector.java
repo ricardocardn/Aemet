@@ -3,7 +3,7 @@ package controller.databasecontroller;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class DataBaseConnection {
+public class DataBaseConnector {
     private final String dbPath;
     private Connection conn;
 
@@ -11,7 +11,7 @@ public class DataBaseConnection {
      * Class Constructor
      * @param dbPath: String with the local url of the database
      */
-    public DataBaseConnection(String dbPath) {
+    public DataBaseConnector(String dbPath) {
         this.dbPath = dbPath;
         connect();
     }
@@ -36,7 +36,7 @@ public class DataBaseConnection {
                 }
 
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                System.out.print(ex.getMessage());
             }
         }
     }
@@ -61,7 +61,7 @@ public class DataBaseConnection {
                 return true;
 
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                System.out.print(ex.getMessage());
             }
         }
 

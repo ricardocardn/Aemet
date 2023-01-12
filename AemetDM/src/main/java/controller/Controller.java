@@ -39,7 +39,7 @@ public class Controller {
             }
         };
 
-        timer.schedule(timerTask, 0, 60*60*1000);
+        timer.schedule(timerTask, 60*1000, 60*60*1000);
     }
 
     private void updateMaxTemp(LocalDate date) {

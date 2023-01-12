@@ -1,9 +1,8 @@
 package controller.command;
 
-import controller.databasecontroller.DataBaseQuery;
+import controller.databasecontroller.StandardQuery;
 import model.TempEvent;
 
-import javax.swing.table.TableCellEditor;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandSQLite implements Command {
-    private final DataBaseQuery dataBaseQuery;
+    private final StandardQuery dataBaseQuery;
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    public CommandSQLite(DataBaseQuery dataBaseQuery) {
+    public CommandSQLite(StandardQuery dataBaseQuery) {
         this.dataBaseQuery = dataBaseQuery;
     }
 
@@ -30,12 +29,18 @@ public class CommandSQLite implements Command {
 
     private List<TempEvent> getTemperatures(String table, LocalDate from, LocalDate to) throws SQLException {
         List<TempEvent> tempEvents = new ArrayList<>();
-        if ((from == null) || equalDates(from, LocalDate.now())) {
+        if (from == null && to == null) {
             tempEvents.add(getMinTemp(table, LocalDate.now()));
+
         } else {
-            LocalDate current = LocalDate.of(from.getYear(), from.getMonth(), from.getDayOfMonth());
-            while (minorOrEqualDate(current, to)){
-                tempEvents.add(getMinTemp(table, current));
+            LocalDate current = (from != null) ?
+                    LocalDate.of(from.getYear(), from.getMonth(), from.getDayOfMonth()) :
+                    (LocalDate) dataBaseQuery.getFirstId(table);
+
+            LocalDate date = (to != null) ? to : LocalDate.now();
+            while (minorOrEqualDate(current, date)) {
+                TempEvent tempEvent = getMinTemp(table, current);
+                if (tempEvent != null) tempEvents.add(getMinTemp(table, current));
                 current = current.plusDays(1);
             }
         }

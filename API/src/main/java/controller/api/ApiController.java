@@ -2,8 +2,6 @@ package controller.api;
 
 import com.google.gson.Gson;
 import controller.command.Command;
-import controller.databasecontroller.DataBaseConnection;
-import controller.databasecontroller.DataBaseQuery;
 import model.TempEvent;
 import spark.Request;
 import web.HTMLMaker;
