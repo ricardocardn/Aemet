@@ -1,6 +1,5 @@
 package controller;
 
-import controller.databasecontroller.DataBaseConnection;
 import controller.databasecontroller.DataBaseDDL;
 import controller.databasecontroller.DataBaseQuery;
 import controller.dataextractor.DataExtractor;
@@ -10,6 +9,8 @@ import model.TempEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller {
     private final DataExtractor dataExtractor;
@@ -24,12 +25,25 @@ public class Controller {
     }
 
     public void run(LocalDate date) {
-        updateMaxTemp(date);
-        updateMinTemp(date);
+        DataExtractor dataExtractor = new DataLakeDataExtractor();
+        dataBaseDDL.createTables();
+
+        Controller controller = new Controller(dataExtractor, dataBaseDDL, dataBaseQuery);
+
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                updateMaxTemp(date);
+                updateMinTemp(date);
+            }
+        };
+
+        timer.schedule(timerTask, 0, 60*60*1000);
     }
 
     private void updateMaxTemp(LocalDate date) {
-        dataBaseDDL.createTables();
+        //dataBaseDDL.createTables();
         try {
             List<TempEvent> tempEvents = dataExtractor.getEvents(date);
             TempEvent maxTempEvent = dataBaseQuery.getTempEvent("MaxTemp", date.format(fr));

@@ -1,0 +1,71 @@
+<html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>GC Meteorological API</title>
+<style>
+.error {
+background: #E9EFF2;
+margin: auto;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 30px;
+padding-bottom: 30px;
+}
+.info {
+width: 80%;
+margin: auto;
+}
+h1 {
+color: white;
+font-family: sans-serif, arial;
+color: #00487a;
+margin-top: 50px;
+}
+.sub {
+color: #C3D1D6;
+margin-left: 20px;
+}
+p {
+margin-top: 20px;
+color: #092A35;
+font-family: arial;
+width: 100%;
+}
+.dt {
+display: flex;
+}
+li {
+font-family: arial;
+}
+</style>
+</head>
+<body>
+    <div class="info">
+        <div class="dt">
+            <h1>GC Meteorological API</h1>
+            <h1 class="sub">V1.0</h1>
+        </div>
+        <p class="desc">You can use this API to obtain information about temperatures in Gran Canaria among days. All data has been obtained from Aemet. In the box bellow, you can see the paths you need to use according to reach your purpose. Any <a name="help"></a> help you may need is also included after this paragraph.</p>
+        <div class="error">
+            <ul>
+                <li>To see all max temperatures among days -> /v1/html/places/with-max-temperature?from={:date}</li>
+                <li>To see all min temperatures among days -> /v1/html/places/with-min-temperature?from={:date}</li>
+                <li>To to check today's max temperature among days -> /v1/html/places/with-max-temperature</li>
+                <li>To to check today's min temperature among days -> /v1/html/places/with-min-temperature</li>
+                <li>To to check max temperatures between two days -> /v1/html/places/with-max-temperature?from={:date1}&to={:date2}</li>
+                <li>To to check min temperatures between two days -> /v1/html/places/with-min-temperature?from={:date1}&to={:date2}</li>
+                <li>br</li>
+                <li><b>(*)</b> date param must have the next format: dd-MM-yyyy</li>
+            </ul>
+
+            <p>This API uses a datamart created from Aemet data and is updated every hour. Thus, max. or min. temperature could change.</p>
+        </div>
+    </div>
+    <center>
+        <p>©Ricardo Cárdenes, ULPGC</p>
+    </center>
+</body>
+</html>

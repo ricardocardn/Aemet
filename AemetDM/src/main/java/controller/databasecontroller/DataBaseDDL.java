@@ -1,20 +1,19 @@
 package controller.databasecontroller;
 
-import com.google.gson.Gson;
 import model.TempEvent;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DataBaseDDL implements DDLdb {
+public class DataBaseDDL implements StandardDDL {
     private static DataBaseDDL dataBaseDDL;
-    private DataBaseConnection dataBaseConnection;
-    private int id = 0;
+    private final DataBaseConnector dataBaseConnection;
+    private final int id = 0;
 
-    public DataBaseDDL(DataBaseConnection dataBaseConnection) {
+    public DataBaseDDL(DataBaseConnector dataBaseConnection) {
         this.dataBaseConnection = dataBaseConnection;
-        this.dataBaseDDL = this;
+        dataBaseDDL = this;
     }
 
     public static DataBaseDDL getInstance() throws SQLException {

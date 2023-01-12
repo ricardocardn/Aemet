@@ -1,4 +1,4 @@
-package controller;
+package controller.collector;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -13,17 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EventCollector {
-    public static String URL = "https://opendata.aemet.es/opendata/api/observacion/convencional/todas";
+public class EventCollector implements DataCollector {
+    private static final String URL = "https://opendata.aemet.es/opendata/api/observacion/convencional/todas";
 
-    public static List<WeatherEvent> getCurrentEvents(String apiKey) throws IOException {
+    public EventCollector() {}
+
+    @Override
+    public List<Object> getCurrentObjects(String apiKey) throws IOException {
         JsonArray weatherList = getJsonElements(apiKey);
-        List<WeatherEvent> weatherEvents = getWeatherEvents(weatherList).stream()
+        return getWeatherEvents(weatherList).stream()
                 .filter(event -> event.getInstant().substring(0,4).equals(LocalDate.now().toString().substring(0,4)))
                 .filter(event -> event.getInstant().substring(5,7).equals(LocalDate.now().toString().substring(5,7)))
                 .filter(event -> event.getInstant().substring(8,10).equals(LocalDate.now().toString().substring(8,10)))
-                .collect(Collectors.toList());;
-        return weatherEvents;
+                .collect(Collectors.toList());
     }
 
     public static String getEventsJson(String apiKey) throws IOException {
@@ -37,11 +39,9 @@ public class EventCollector {
                 AemetAPIAccessor.getInstance().get(URL, apiKey),
                 JsonObject.class);
 
-        JsonArray weatherList = gson.fromJson(
+        return gson.fromJson(
                 AemetAPIAccessor.getInstance().get(response.get("datos").getAsString(), apiKey),
                 JsonArray.class);
-
-        return weatherList;
     }
 
     private static List<WeatherEvent> getWeatherEvents(JsonArray weatherList) {

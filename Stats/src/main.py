@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 
 SECONDS_IN_HOUR = 3600
-SECONDS_IN_DAY = 24*SECONDS_IN_HOUR
+SECONDS_IN_DAY = 24 * SECONDS_IN_HOUR
 
 mx, mn = [], []
 
@@ -20,10 +20,10 @@ def get_temperatures_among_days(url):
 
     min_result = cur.execute("SELECT temp FROM MinTemp ORDER BY date")
     min_temperature = [i[0] for i in min_result.fetchall()]
-    if (len(min_temperature) <= 20):
+    if (len(min_temperature) <= 10):
         return max_temperature, min_temperature
     else:
-        return max_temperature[0:20], min_temperature[0:20]
+        return max_temperature[0:10], min_temperature[0:10]
 
 
 def plot_temp(min_temperatures, max_temperatures, gp_url):
@@ -32,15 +32,42 @@ def plot_temp(min_temperatures, max_temperatures, gp_url):
     plt.figure(figsize=(10, 8))
     plt.scatter(x, max_temperatures, c='red', label='maximum')
     plt.scatter(x, min_temperatures, c='blue', label='minimum')
-    plt.title('Temperature per day (last 20 d.)')
+    plt.title('Temperature per day (last 10 d.)')
     plt.xlabel('Day')
-    plt.ylabel('Hour')
+    plt.ylabel('Temperature')
     plt.legend(loc='center left')
 
-    if not os.path.exists(gp_url + "/" + datetime.today().strftime('%h')):
-        os.mkdir(gp_url + "/" + datetime.today().strftime('%h'))
-    plt.savefig(gp_url + "/" + datetime.today().strftime('%h') + "/" + datetime.today().strftime('%Y%m%d'))
+    str_dir = gp_url + "/" + datetime.today().strftime('%h')
+    str_spec_dir = gp_url + "/" + datetime.today().strftime('%h') + "/" + datetime.today().strftime('%Y%m%d')
+    try:
+        os.mkdir(str_dir)
+    except:
+        pass
+    finally:
+        try:
+            os.mkdir(str_spec_dir)
+        except:
+            pass
 
+    plt.savefig(str_spec_dir + "/max_min_temp")
+
+    plt.figure(figsize=(10, 8))
+    plt.scatter(x, max_temperatures, c='red', label='maximum')
+    plt.title('Max temperature per day (last 10 d.)')
+    plt.xlabel('Day')
+    plt.ylabel('Temperature')
+    plt.legend(loc='center left')
+
+    plt.savefig(str_spec_dir + "/max_temp")
+
+    plt.figure(figsize=(10, 8))
+    plt.scatter(x, min_temperatures, c='blue', label='minimum')
+    plt.title('Min temperature per day (last 10 d.)')
+    plt.xlabel('Day')
+    plt.ylabel('Temperature')
+    plt.legend(loc='center left')
+
+    plt.savefig(str_spec_dir + "/min_temp")
 
 def temperatures(url):
     con = sqlite3.connect(url)
@@ -117,4 +144,4 @@ if __name__ == '__main__':
     while True:
         max_temperature, min_temperature = get_temperatures_among_days(url_db)
         plot_temp(min_temperature, max_temperature, url_gp)
-        time.sleep(SECONDS_IN_DAY)
+        time.sleep(SECONDS_IN_HOUR)

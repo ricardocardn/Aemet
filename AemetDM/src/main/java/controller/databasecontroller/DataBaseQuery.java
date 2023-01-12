@@ -1,6 +1,5 @@
 package controller.databasecontroller;
 
-import com.google.gson.Gson;
 import model.TempEvent;
 
 import java.sql.ResultSet;
@@ -8,12 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class DataBaseQuery implements Query {
-    private DataBaseConnection dataBaseConnection;
+public class DataBaseQuery implements StandardQuery {
+    private final DataBaseConnector dataBaseConnection;
 
-    public DataBaseQuery(DataBaseConnection dataBaseConnection) {
+    public DataBaseQuery(DataBaseConnector dataBaseConnection) {
         this.dataBaseConnection = dataBaseConnection;
     }
 
