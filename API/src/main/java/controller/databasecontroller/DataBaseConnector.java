@@ -7,19 +7,11 @@ public class DataBaseConnector {
     private final String dbPath;
     private Connection conn;
 
-    /*
-     * Class Constructor
-     * @param dbPath: String with the local url of the database
-     */
     public DataBaseConnector(String dbPath) {
         this.dbPath = dbPath;
         connect();
     }
 
-    /*
-     * Method that establishes a connection with the database
-     * given as class params
-     */
     public void connect() {
         String dbPath = "jdbc:sqlite:" + this.dbPath;
         Connection conn = null;
@@ -49,10 +41,6 @@ public class DataBaseConnector {
         return dbPath;
     }
 
-    /*
-     * Method that closed the opened connection with the database
-     * given as class params
-     */
     public boolean disconnect() {
         if (conn != null) {
             try {

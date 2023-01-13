@@ -10,11 +10,8 @@ import java.time.LocalDate;
 public class Main {
     public static void main(String[] args) {
         DataExtractor dataExtractor = new DataLakeDataExtractor();
-        DataBaseConnector dataBaseConnection = new DataBaseConnector("temp.db");
-        DataBaseDDL dataBaseDDL = new DataBaseDDL(dataBaseConnection);
-        DataBaseQuery dataBaseQuery = new DataBaseQuery(dataBaseConnection);
 
-        Controller controller = new Controller(dataExtractor, dataBaseDDL, dataBaseQuery);
+        Controller controller = new Controller(dataExtractor);
         controller.run(LocalDate.now());
     }
 }

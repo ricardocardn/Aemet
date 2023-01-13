@@ -1,5 +1,6 @@
 package controller;
 
+import controller.databasecontroller.DataBaseConnector;
 import controller.databasecontroller.DataBaseDDL;
 import controller.databasecontroller.DataBaseQuery;
 import controller.dataextractor.DataExtractor;
@@ -14,21 +15,20 @@ import java.util.TimerTask;
 
 public class Controller {
     private final DataExtractor dataExtractor;
-    private final DataBaseDDL dataBaseDDL;
-    private final DataBaseQuery dataBaseQuery;
+    private DataBaseDDL dataBaseDDL;
+    private DataBaseQuery dataBaseQuery;
     private final static DateTimeFormatter fr = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    public Controller(DataExtractor dataExtractor, DataBaseDDL dataBaseDDL, DataBaseQuery dataBaseQuery) {
+    public Controller(DataExtractor dataExtractor) {
         this.dataExtractor = dataExtractor;
-        this.dataBaseDDL = dataBaseDDL;
-        this.dataBaseQuery = dataBaseQuery;
     }
 
     public void run(LocalDate date) {
-        DataExtractor dataExtractor = new DataLakeDataExtractor();
-        dataBaseDDL.createTables();
+        DataBaseConnector dataBaseConnection = new DataBaseConnector("temp.db");
+        dataBaseDDL = new DataBaseDDL(dataBaseConnection);
+        dataBaseQuery = new DataBaseQuery(dataBaseConnection);
 
-        Controller controller = new Controller(dataExtractor, dataBaseDDL, dataBaseQuery);
+        dataBaseDDL.createTables();
 
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
@@ -39,7 +39,7 @@ public class Controller {
             }
         };
 
-        timer.schedule(timerTask, 60*1000, 60*60*1000);
+        timer.schedule(timerTask, 0, 60*60*1000);
     }
 
     private void updateMaxTemp(LocalDate date) {
