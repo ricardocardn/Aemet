@@ -41,18 +41,15 @@ public class DataBaseConnector {
         return dbPath;
     }
 
-    public boolean disconnect() {
+    public void disconnect() {
         if (conn != null) {
             try {
                 conn.close();
                 System.out.println("DataBase connection closed");
-                return true;
 
             } catch (Exception ex) {
                 System.out.print(ex.getMessage());
             }
         }
-
-        return false;
     }
 }
